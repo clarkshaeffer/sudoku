@@ -52,6 +52,7 @@ def main():
                 # not the same square
                 square = getSquare(sudoku, i, square_size)
                 print('square: ' + str(square))
+                # square_list = getSquareList(sudoku, i, square_size, square)
 
             if not match:
                 # add to sudoku
@@ -73,54 +74,72 @@ def PrintSudoku(sud, size):
 
 def getSquare(sud, row, square_size):
     square_nums = []
-    if row / square_size < 1:
-        if (len(sud[row])) / square_size < 1:
-            for i in range(0 * (square_size), 1 * (square_size)):
-                for j in range(0 * (square_size), 1 * (square_size)):
-                    square_nums.append(sud[i][j])
-            return square_nums
-        elif (len(sud[row])) / square_size >= 1 and (len(sud[row])) / square_size < 2:
-            for i in range(0 * (square_size), 1 * (square_size)):
-                for j in range(1 * (square_size), 2 * (square_size)):
-                    square_nums.append(sud[i][j])
-            return square_nums
+    print(len(sud[row]))
+    if len(sud[row]) > 0 and row > 0:
+        if row / square_size < 1:
+            if (len(sud[row])) / square_size < 1:
+                for i in range(0 * (square_size), 1 * (square_size)):
+                    for j in range(0 * (square_size), 1 * (square_size)):
+                        square_nums.append(sud[i][j])
+                return square_nums
+                # return 1
+            elif (len(sud[row])) / square_size >= 1 and (len(sud[row])) / square_size < 2:
+                for i in range(0 * (square_size), 1 * (square_size)):
+                    for j in range(1 * (square_size), 2 * (square_size)):
+                        square_nums.append(sud[i][j])
+                return square_nums
+                # return 2
+            else:
+                for i in range(0 * (square_size), 1 * (square_size)):
+                    for j in range(2 * (square_size), 3 * (square_size)):
+                        square_nums.append(sud[i][j])
+                return square_nums
+                # return 3
+        elif row / square_size >= 1 and row / square_size < 2:
+            if (len(sud[row])) / square_size < 1:
+                for i in range(1 * (square_size), 2 * (square_size)):
+                    for j in range(0 * (square_size), 1 * (square_size)):
+                        square_nums.append(sud[i][j])
+                return square_nums
+                # return 4
+            elif (len(sud[row])) / square_size >= 1 and (len(sud[row])) / square_size < 2:
+                for i in range(1 * (square_size), 2 * (square_size)):
+                    for j in range(1 * (square_size), 2 * (square_size)):
+                        square_nums.append(sud[i][j])
+                return square_nums
+                # return 5
+            else:
+                for i in range(1 * (square_size), 2 * (square_size)):
+                    for j in range(2 * (square_size), 3 * (square_size)):
+                        square_nums.append(sud[i][j])
+                return square_nums
+                # return 6
         else:
-            for i in range(0 * (square_size), 1 * (square_size)):
-                for j in range(2 * (square_size), 3 * (square_size)):
-                    square_nums.append(sud[i][j])
-            return square_nums
-    elif row / square_size >= 1 and row / square_size < 2:
-        if (len(sud[row])) / square_size < 1:
-            for i in range(1 * (square_size), 2 * (square_size)):
-                for j in range(0 * (square_size), 1 * (square_size)):
-                    square_nums.append(sud[i][j])
-            return square_nums
-        elif (len(sud[row])) / square_size >= 1 and (len(sud[row])) / square_size < 2:
-            for i in range(1 * (square_size), 2 * (square_size)):
-                for j in range(1 * (square_size), 2 * (square_size)):
-                    square_nums.append(sud[i][j])
-            return square_nums
-        else:
-            for i in range(1 * (square_size), 2 * (square_size)):
-                for j in range(2 * (square_size), 3 * (square_size)):
-                    square_nums.append(sud[i][j])
-            return square_nums
-    else:
-        if (len(sud[row])) / square_size < 1:
-            for i in range(2 * (square_size), 3 * (square_size)):
-                for j in range(0 * (square_size), 1 * (square_size)):
-                    square_nums.append(sud[i][j])
-            return square_nums
-        elif (len(sud[row])) / square_size >= 1 and (len(sud[row])) / square_size < 2:
-            for i in range(2 * (square_size), 3 * (square_size)):
-                for j in range(1 * (square_size), 2 * (square_size)):
-                    square_nums.append(sud[i][j])
-            return square_nums
-        else:
-            for i in range(2 * (square_size), 3 * (square_size)):
-                for j in range(2 * (square_size), 3 * (square_size)):
-                    square_nums.append(sud[i][j])
-            return square_nums
+            if (len(sud[row])) / square_size < 1:
+                for i in range(2 * (square_size), 3 * (square_size)):
+                    for j in range(0 * (square_size), 1 * (square_size)):
+                        square_nums.append(sud[i][j])
+                return square_nums
+                # return 7
+            elif (len(sud[row])) / square_size >= 1 and (len(sud[row])) / square_size < 2:
+                for i in range(2 * (square_size), 3 * (square_size)):
+                    for j in range(1 * (square_size), 2 * (square_size)):
+                        square_nums.append(sud[i][j])
+                return square_nums
+                # return 8
+            else:
+                for i in range(2 * (square_size), 3 * (square_size)):
+                    for j in range(2 * (square_size), 3 * (square_size)):
+                        square_nums.append(sud[i][j])
+                return square_nums
+                # return 9
+
+
+def getSquareList(sud, row, square_size, sq):
+    # l = []
+    # if len(sud[row]) > 0:
+    #     for i in range(len(sud[row])):
+    return l
 
 
 main()
