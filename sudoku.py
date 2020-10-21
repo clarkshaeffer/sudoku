@@ -1,289 +1,148 @@
 import random
-# import numpy as np
-from itertools import chain
-import gtimer as gt
-
-
-# tries = 0
 
 
 def main():
-    main.counter += 1
-    size = 9
-    square_size = int(size ** (1/2))
-    num_list = list(range(1, size + 1))
-    # init
-    sudoku = []
-    num_count = 0
-    for i in range(size):
-        line = []
-        sudoku.append(line)
+    found = False
+    tries = 0
+    # main.counter += 1
 
-    # create sudoku!
-    # print('creating...')
-    # sudoku[0][0] = random.randint(1, size)
-    for i in range(size):
-        while len(sudoku[i]) < size and num_count < size**2:
-            # num = random.randint(1, size)
+    # starting with just 9x9.
+
+    sudoku = []  # 1D list of all sudoku's elements.
+
+    while len(sudoku) < 81:
+        tries += 1
+        num_list = list(range(1, 10))
+        num = random.choice(num_list)
+
+        while inRow(sudoku, num) or inCol(sudoku, num) or inSquare(sudoku, num):
             try:
-                # get random number from possible random numbers not yet tried
+                num_list.remove(num)
                 num = random.choice(num_list)
             except IndexError:
-                # if all numbers have been tried, a number can't be taken from an empty list. Error and exit.
-
-                # print('Generation error: ran out of numbers to choose from')
-
-                main()
-
-                # exit()
-            # refresh match
-            match = False
-
-            # print('i: ' + str(i))
-            # print("num: " + str(num))
-            # PrintSudoku(sudoku, size)
-
-            # not the same row
-            for j in range(len(sudoku[i])):
-                if num == sudoku[i][j]:
-                    # print('same row')
-                    match = True
-
-            # if not the same row until now
-            if not match:
-                # not the same column
-                for j in range(i):
-                    # print('j: ' + str(j) +
-                    #   '\tlen(sudoku[i]): ' + str(len(sudoku[i])))
-                    if num == sudoku[j][len(sudoku[i])]:
-                        # print('same col')
-                        match = True
-
-            # if not same row nor column
-            if not match:
-                # not the same square
-                square = getSquare(sudoku, i, square_size, num_count)
-                # print('square: ' + str(square))
-                square_list = getSquareList(
-                    sudoku, i, square_size, square, num_count)
-                if num in square_list:
-                    # print('same square')
-                    match = True
-
-            # if not in same row, column nor square: new number! Add to the sudoku, and reset the choices list
-            if not match:
-                # print()
-                # print("SQUARE LIST:")
-                # print(square_list)
-                # print("END SQUARE LIST")
-                # print()
-                # add to sudoku
-                sudoku[i].append(num)
-                # print(str(num) + " placed at value " +
-                #   str(i) + ", " + str(len(sudoku[i]) - 1))
-                # refresh the random number list, for next number to choose again
-                num_list = list(range(1, size + 1))
-                num_count += 1
-                # print()
-            else:
-                # remove the random number from the list, to not choose again.
-                if num in num_list:
-                    num_list.remove(num)
-                # else:
-                    # print(str(num) + " not in list")
-
-    PrintSudoku(sudoku, size)
-    print("tries: " + str(main.counter))
-    # exit()
+                sudoku = []
+        sudoku.append(num)
+    PrintSudoku(sudoku)
+    print("tries: " + str(tries))
 
 
-def PrintSudoku(sud, size):
-    for i in range(size):
-        print(sud[i])
+def PrintSudoku(sud):
+    rows = getRows(sud)
+    for i in range(rows + 1):
+        print(getRowList(sud, i))
 
 
-def getSquare(sud, row, square_size, num_count):
-    # square_nums = []
-    # print("row length: " + str(len(sud[row])))
-    # if len(sud[row]) > 0 and row > 0:
+def getRows(sud):
+    # get the current number of rows in the sudoku. Starts at 0 and goes to the current row that is of length < size.
+    return int(len(sud) / 9)
 
-    # FOR LATER OPTIMIZATION. USE DIVISION OF CURRENT COUNT AND FULL DIMENSIONS AND % TO ISOLATE SQUARE.
-    # full_size = square_size ** 2
-    # if num_count / full_size < square_size:
 
-    if row / square_size < 1:
-        if (len(sud[row])) / square_size < 1:
-            # for i in range(0 * (square_size), 1 * (square_size)):
-            #     for j in range(0 * (square_size), 1 * (square_size)):
-            #         square_nums.append(sud[i][j])
-            # return square_nums
-            return 0
-        elif (len(sud[row])) / square_size >= 1 and (len(sud[row])) / square_size < 2:
-            # for i in range(0 * (square_size), 1 * (square_size)):
-            #     for j in range(1 * (square_size), 2 * (square_size)):
-            #         square_nums.append(sud[i][j])
-            # return square_nums
-            return 1
-        else:
-            # for i in range(0 * (square_size), 1 * (square_size)):
-            #     for j in range(2 * (square_size), 3 * (square_size)):
-            #         square_nums.append(sud[i][j])
-            # return square_nums
-            return 2
-    elif row / square_size >= 1 and row / square_size < 2:
-        if (len(sud[row])) / square_size < 1:
-            # for i in range(1 * (square_size), 2 * (square_size)):
-            #     for j in range(0 * (square_size), 1 * (square_size)):
-            #         square_nums.append(sud[i][j])
-            # return square_nums
-            return 3
-        elif (len(sud[row])) / square_size >= 1 and (len(sud[row])) / square_size < 2:
-            # for i in range(1 * (square_size), 2 * (square_size)):
-            #     for j in range(1 * (square_size), 2 * (square_size)):
-            #         square_nums.append(sud[i][j])
-            # return square_nums
-            return 4
-        else:
-            # for i in range(1 * (square_size), 2 * (square_size)):
-            #     for j in range(2 * (square_size), 3 * (square_size)):
-            #         square_nums.append(sud[i][j])
-            # return square_nums
-            return 5
+def getRowList(sud, row):
+    # get list of elements in current row.
+    # if row is full, print full row; len mod size is the same as empty. Just check if row count is more.
+    if int(len(sud) / 9) > row:
+        return sud[(row * 9):(row * 9) + (9)]
     else:
-        if (len(sud[row])) / square_size < 1:
-            # for i in range(2 * (square_size), 3 * (square_size)):
-            #     for j in range(0 * (square_size), 1 * (square_size)):
-            #         square_nums.append(sud[i][j])
-            # return square_nums
+        return sud[(row * 9):(row * 9) + (len(sud) % 9)]
+
+
+def inRow(sud, x):
+    return x in getRowList(sud, getRows(sud))
+
+
+def getCols(sud):
+    return len(sud) % 9
+
+
+def getColList(sud, col):
+    colList = []
+    for i in range(getRows(sud)):
+        colList.append(sud[i * 9 + col])
+    return colList
+
+
+def inCol(sud, y):
+    return y in getColList(sud, getCols(sud))
+
+
+def getSquare(sud):
+    if getRows(sud) <= 2:
+        if getCols(sud) <= 2:
+            return 0
+        elif getCols(sud) >= 3 and getCols(sud) <= 5:
+            return 1
+        elif getCols(sud) >= 6 and getCols(sud) <= 8:
+            return 2
+    elif getRows(sud) >= 3 and getRows(sud) <= 5:
+        if getCols(sud) <= 2:
+            return 3
+        elif getCols(sud) >= 3 and getCols(sud) <= 5:
+            return 4
+        elif getCols(sud) >= 6 and getCols(sud) <= 8:
+            return 5
+    elif getRows(sud) >= 6 and getRows(sud) <= 8:
+        if getCols(sud) <= 2:
             return 6
-        elif (len(sud[row])) / square_size >= 1 and (len(sud[row])) / square_size < 2:
-            # for i in range(2 * (square_size), 3 * (square_size)):
-            #     for j in range(1 * (square_size), 2 * (square_size)):
-            #         square_nums.append(sud[i][j])
-            # return square_nums
+        elif getCols(sud) >= 3 and getCols(sud) <= 5:
             return 7
-        else:
-            # for i in range(2 * (square_size), 3 * (square_size)):
-            #     for j in range(2 * (square_size), 3 * (square_size)):
-            #         square_nums.append(sud[i][j])
-            # return square_nums
-            return 9
+        elif getCols(sud) >= 6 and getCols(sud) <= 8:
+            return 8
 
 
-# l.append(sud[i][0:(count % full_size) + 1])
-def getSquareList(sud, row, square_size, sq, count):
-    l = []
-    full_size = square_size ** 2
+def getSquareList(sud, sq):
+    rows = getRows(sud)
+    cols = getCols(sud)
+    squareList = []
     if sq == 0:
-        # how many filled rows is the same as the current count (ex. 10) / 9 = 1
-        filled_rows = int(count / full_size)
-        for i in range(filled_rows):  # add already-full rows to the list
-            l.append(sud[i*1][0:3])
-        # for not-yet filled rows, go value by value. Final row is # of whatever's left of count after previous rows are taken care of.
-        last_row = count - (filled_rows * full_size)
-        l.append(sud[filled_rows][0:last_row])
-
+        for i in range(len(sud)):
+            if int(i / 9) <= 2:
+                if i % 9 <= 2:
+                    squareList.append(sud[i])
     elif sq == 1:
-        # how many filled rows is the same as the current count (ex. 10) / 9 = 1
-        filled_rows = int(count / full_size)
-        for i in range(filled_rows):  # add already-full rows to the list
-            l.append(sud[i*1][3:6])
-        # for not-yet filled rows, go value by value. Final row is # of whatever's left of count after previous rows are taken care of.
-        last_row = count - (filled_rows * full_size)
-        l.append(sud[filled_rows][3:last_row])
-
+        for i in range(len(sud)):
+            if int(i / 9) <= 2:
+                if i % 9 >= 3 and i % 9 <= 5:
+                    squareList.append(sud[i])
     elif sq == 2:
-        # how many filled rows is the same as the current count (ex. 10) / 9 = 1
-        filled_rows = int(count / full_size)
-        for i in range(filled_rows):  # add already-full rows to the list
-            l.append(sud[i*1][6:8])
-        # for not-yet filled rows, go value by value. Final row is # of whatever's left of count after previous rows are taken care of.
-        last_row = count - (filled_rows * full_size)
-        l.append(sud[filled_rows][6:last_row])
-
+        for i in range(len(sud)):
+            if int(i / 9) <= 2:
+                if i % 9 >= 6 and i % 9 <= 8:
+                    squareList.append(sud[i])
     elif sq == 3:
-        # how many filled rows is the same as the current count (ex. 10) / 9 = 1
-        filled_rows = int(count / full_size)
-        for i in range(int(filled_rows / 3)):  # add already-full rows to the list
-            l.append(sud[i+3][0:3])
-        # for not-yet filled rows, go value by value. Final row is # of whatever's left of count after previous rows are taken care of.
-        last_row = count - (filled_rows * full_size)
-        l.append(sud[filled_rows][0:last_row])
-
+        for i in range(len(sud)):
+            if int(i / 9) >= 3 and int(i / 9) <= 5:
+                if i % 9 <= 2:
+                    squareList.append(sud[i])
     elif sq == 4:
-        # how many filled rows is the same as the current count (ex. 10) / 9 = 1
-        filled_rows = int(count / full_size)
-        for i in range(int(filled_rows / 3)):  # add already-full rows to the list
-            l.append(sud[i+3][3:6])
-        # for not-yet filled rows, go value by value. Final row is # of whatever's left of count after previous rows are taken care of.
-        last_row = count - (filled_rows * full_size)
-        l.append(sud[filled_rows][3:last_row])
-
+        for i in range(len(sud)):
+            if int(i / 9) >= 3 and int(i / 9) <= 5:
+                if i % 9 >= 3 and i % 9 <= 5:
+                    squareList.append(sud[i])
     elif sq == 5:
-        # how many filled rows is the same as the current count (ex. 10) / 9 = 1
-        filled_rows = int(count / full_size)
-        for i in range(int(filled_rows / 3)):  # add already-full rows to the list
-            l.append(sud[i+3][6:8])
-        # for not-yet filled rows, go value by value. Final row is # of whatever's left of count after previous rows are taken care of.
-        last_row = count - (filled_rows * full_size)
-        l.append(sud[filled_rows][6:last_row])
-
+        for i in range(len(sud)):
+            if int(i / 9) >= 3 and int(i / 9) <= 5:
+                if i % 9 >= 6 and i % 9 <= 8:
+                    squareList.append(sud[i])
     elif sq == 6:
-        # how many filled rows is the same as the current count (ex. 10) / 9 = 1
-        filled_rows = int(count / full_size)
-        for i in range(int(filled_rows / 6)):  # add already-full rows to the list
-            l.append(sud[i+6][0:3])
-        # for not-yet filled rows, go value by value. Final row is # of whatever's left of count after previous rows are taken care of.
-        last_row = count - (filled_rows * full_size)
-        l.append(sud[filled_rows][0:last_row])
-
-    elif sq == 4:
-        # how many filled rows is the same as the current count (ex. 10) / 9 = 1
-        filled_rows = int(count / full_size)
-        for i in range(int(filled_rows / 6)):  # add already-full rows to the list
-            l.append(sud[i+6][3:6])
-        # for not-yet filled rows, go value by value. Final row is # of whatever's left of count after previous rows are taken care of.
-        last_row = count - (filled_rows * full_size)
-        l.append(sud[filled_rows][3:last_row])
-
-    elif sq == 5:
-        # how many filled rows is the same as the current count (ex. 10) / 9 = 1
-        filled_rows = int(count / full_size)
-        for i in range(int(filled_rows / 6)):  # add already-full rows to the list
-            l.append(sud[i+6][6:8])
-        # for not-yet filled rows, go value by value. Final row is # of whatever's left of count after previous rows are taken care of.
-        last_row = count - (filled_rows * full_size)
-        l.append(sud[filled_rows][6:last_row])
-
-    # return list(np.ravel(np.array(l)))
-    # print(list(chain.from_iterable(l)))
-    return list(chain.from_iterable(l))
+        for i in range(len(sud)):
+            if int(i / 9) >= 6 and int(i / 9) <= 8:
+                if i % 9 <= 2:
+                    squareList.append(sud[i])
+    elif sq == 7:
+        for i in range(len(sud)):
+            if int(i / 9) >= 6 and int(i / 9) <= 8:
+                if i % 9 >= 3 and i % 9 <= 5:
+                    squareList.append(sud[i])
+    elif sq == 8:
+        for i in range(len(sud)):
+            if int(i / 9) >= 6 and int(i / 9) <= 8:
+                if i % 9 >= 6 and i % 9 <= 8:
+                    squareList.append(sud[i])
+    return squareList
 
 
-main.counter = 0
+def inSquare(sud, z):
+    return z in getSquareList(sud, getSquare(sud))
+
+
 main()
-# print("tries: " + str(main.counter))
-
-# def whatBox(row, col):
-#     if row <= 2:
-#         if col <= 2:
-#             box = 1
-#         elif col >= 3 and col <= 6:
-#             box = 2
-#         else:
-#             box = 3
-#     elif row >= 3 and row <= 6:
-#         if col <= 2:
-#             box = 4
-#         elif col >= 3 and col <= 6:
-#             box = 5
-#         else:
-#             box = 6
-#     else:
-#         if col <= 2:
-#             box = 7
-#         elif col >= 3 and col <= 6:
-#             box = 8
-#         else:
-#             box = 9
-#     return box
