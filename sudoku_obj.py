@@ -1,6 +1,6 @@
-import sudoku_lib
+# import sudoku_lib
 
 
 class Sudoku():
-    def __init__(self):
-        self.sudoku = sudoku_lib.generateSudoku()
+    def __init__(self, sudoku):
+        self.sudoku = sudoku

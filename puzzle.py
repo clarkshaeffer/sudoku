@@ -65,8 +65,9 @@ elif inp == 8:
 
 shown = 81 - hidden
 
-original_sudoku = sudoku_obj.Sudoku()
-puzzle = original_sudoku
+original_sudoku = sudoku_obj.Sudoku(sudoku_lib.generateSudoku())
+puzzle = sudoku_obj.Sudoku([])
+puzzle.sudoku = list(original_sudoku.sudoku)
 
 hidden_count = 0
 for i in range(81):
