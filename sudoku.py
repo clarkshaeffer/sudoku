@@ -1,11 +1,10 @@
 import random
+import gtimer as gt
 
 
 def main():
-    found = False
+    gt.reset()
     tries = 0
-    # main.counter += 1
-
     # starting with just 9x9.
 
     sudoku = []  # 1D list of all sudoku's elements.
@@ -23,12 +22,18 @@ def main():
                 sudoku = []
         sudoku.append(num)
     PrintSudoku(sudoku)
+    # substring in report with total time
+    total_time = float(gt.report()[91:97].split()[0])
+    total_time *= 1000  # convert seconds ot milliseconds
     print("tries: " + str(tries))
+    print("total time: " + str(total_time) + " ms")
+    # sudoku attempts per millisecond
+    print("Attempts per ms: " + str(tries / total_time))
 
 
 def PrintSudoku(sud):
     rows = getRows(sud)
-    for i in range(rows + 1):
+    for i in range(rows):
         print(getRowList(sud, i))
 
 
@@ -146,3 +151,24 @@ def inSquare(sud, z):
 
 
 main()
+
+
+# from a sample of 50 sudokus:
+# mean = 216.978 milliseconds per sudoku
+# total possible sudokus - https://en.wikipedia.org/wiki/Mathematics_of_Sudoku
+# 6670903752021072936960
+# milliseconds to generate all possible sudokus (if sudoku checking were implemented, which it won't)
+# 1.4474393543060285e+24
+# seconds
+# 1.4474393543060284e+21
+# minutes
+# 2.4123989238433804e+19
+# hours
+# 4.020664873072301e+17
+# days
+# 1.675277030446792e+16
+# weeks
+# 2393252900638274.5
+# years
+# 46024094243043.74
+# 46 trillion years to produce all possible solvable sudokus using my algorithm
