@@ -3,6 +3,7 @@ Sudoku generator for Python; soon to learn with React Native.
 
 Random Sudoku generation is now fully functional. After cloning, just run the python script:
 
-`python3 sudoku.py`
+`python3 puzzle.py`
 
-and a randomly-generated 9x9 sudoku will appear on your command line, followed by the number of attempts the program took before reaching success.
+and follow the UI prompt.
+Copy the generated sudoku to paper and, when ready, check the answer!
