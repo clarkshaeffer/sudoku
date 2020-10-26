@@ -21,14 +21,14 @@ difficulty_prompt = '''
 
 Choose your difficulty! (input the number below)
 
-1. Baby's First Sudoku 40 hidden
-2. Very Easy 45 hidden
-3. Easy 49
-4. Medium 53
-5. Challenging 56
-6. Hard 59
-7. Very Hard 61
-8. Dark Souls of Sudokus 64
+1. Baby's First Sudoku (40 hidden)
+2. Very Easy (45 hidden)
+3. Easy (49)
+4. Medium (53)
+5. Challenging (56)
+6. Hard (59)
+7. Very Hard (61)
+8. Dark Souls of Sudokus (64)
 '''
 
 print(difficulty_prompt)
