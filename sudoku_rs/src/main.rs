@@ -123,10 +123,22 @@ fn print_sudoku(sud: &Vec<i32>) {
     println!();
 }
 
+fn checker(sud: &Vec<i32>) -> bool{
+    let mut fail = false;
+    for i in 0..sud.len() {
+        if does_collide(sud, i.try_into().unwrap(), sud[i]) {
+            fail = true;
+        }
+    }
+    fail
+}
+
 fn main() {
     let sudoku = generate_sudoku();
     let finished_sudoku = sudoku.0;
     let fail_count = sudoku.1;
     print_sudoku(&finished_sudoku);
     println!("fail count: {fail_count}");
+    let checked = checker(&finished_sudoku);
+    println!("is valid sudoku: {checked}");
 }
